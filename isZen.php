@@ -1,5 +1,5 @@
 <?php
-class is_zen {
+class isZen {
 
     /**
      * @assert ('文字列です。') === true
