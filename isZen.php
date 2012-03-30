@@ -1,5 +1,7 @@
 <?php
+
 class isZen {
+
 
     /**
      * @assert ('文字列です。') === true
@@ -42,7 +44,7 @@ class isZen {
      * @assert ('全角abcd') === false
      * @assert ('半角ｶﾅ') === false
      */
-    function is_zen_mb_substr($str) {
+    function is_zen_mb_substr ($str) {
         for ($i = 0; $i < mb_strlen($str); $i++) {
             $char = mb_substr($str, $i);
             if (strlen($char) === mb_strlen($char)) {
@@ -52,5 +54,48 @@ class isZen {
         return true;
     }
 
+
+    /**
+     * @assert ('文字列です。') === true
+     * @assert ('abcd1234+:;!') === false
+     * @assert ('全角abcd') === false
+     * @assert ('半角ｶﾅ') === false
+     */
+    function is_zen_mb_substr_encoding ($str, $encoding = null) {
+        if (is_null($encoding)) {
+            $encoding = mb_internal_encoding();
+        }
+        $len = mb_strlen($str, $encoding);
+        for ($i = 0; $i < $len; $i++) {
+            $char = mb_substr($str, $i, 1, $encoding);
+            if ($this->is_hankaku($char, true, true, $encoding)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function is_hankaku($str, $include_kana = false, $include_controls = false, $encoding = null) {
+        if (!$include_controls && !ctype_print($str)) {
+            return false;
+        }
+
+        if (is_null($encoding)) {
+            $encoding = mb_internal_encoding();
+        }
+        if ($include_kana) {
+            $to_encoding = 'SJIS';
+        } else {
+            $to_encoding = 'UTF-8';
+        }
+        $str = mb_convert_encoding($str, $to_encoding, $encoding);
+
+        if (strlen($str) === mb_strlen($str, $to_encoding)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
 }
