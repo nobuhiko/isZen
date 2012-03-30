@@ -44,23 +44,6 @@ class isZen {
      * @assert ('全角abcd') === false
      * @assert ('半角ｶﾅ') === false
      */
-    function is_zen_mb_substr ($str) {
-        for ($i = 0; $i < mb_strlen($str); $i++) {
-            $char = mb_substr($str, $i);
-            if (strlen($char) === mb_strlen($char)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    /**
-     * @assert ('文字列です。') === true
-     * @assert ('abcd1234+:;!') === false
-     * @assert ('全角abcd') === false
-     * @assert ('半角ｶﾅ') === false
-     */
     function is_zen_mb_substr_encoding ($str, $encoding = null) {
         if (is_null($encoding)) {
             $encoding = mb_internal_encoding();
